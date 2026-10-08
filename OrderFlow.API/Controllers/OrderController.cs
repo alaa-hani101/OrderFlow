@@ -3,8 +3,7 @@ using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Mvc;
 using OrderFlow.Application.Features.Orders.CreateOrder;
 using OrderFlow.Application.Features.Orders.GetOrders;
-using OrderFlow.Domain.Features.Orders.CreateOrder;
-using OrderFlow.Domain.Features.Orders.GetOrderById;
+using OrderFlow.Application.Features.Orders.GetOrderById;
 
 namespace OrderFlow.API.Controllers;
 

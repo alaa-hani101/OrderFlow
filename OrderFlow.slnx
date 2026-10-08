@@ -1,4 +1,7 @@
 <Solution>
+  <Folder Name="/monitoring/">
+    <File Path="prometheus.yml" />
+  </Folder>
   <Project Path="OrderFlow.API/OrderFlow.API.csproj" />
   <Project Path="OrderFlow.Application/OrderFlow.Application.csproj" />
   <Project Path="OrderFlow.Domain/OrderFlow.Domain.csproj" />

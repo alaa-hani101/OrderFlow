@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OrderFlow.Application.common;
+using OrderFlow.Application.common.Observability;
 using OrderFlow.Domain.Entities.Enums;
 using OrderFlow.Infrastructure.Persistence;
 
@@ -22,6 +23,8 @@ public class PendingOrdersProcessor : IPendingOrdersProcessor
         var pendingOrders = await _context.Orders
             .Where(o => o.Status == OrderStatus.Pending)
             .ToListAsync(cancellationToken);
+
+        OrderFlowMetrics.SetPendingOrders(pendingOrders.Count);
 
         foreach (var order in pendingOrders)
         {

@@ -1,3 +1,6 @@
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 using OrderFlow.Application.Features.Orders.CreateOrder;
 using OrderFlow.Infrastructure;
 namespace OrderFlow.API
@@ -7,6 +10,32 @@ namespace OrderFlow.API
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Logging.ClearProviders();
+            builder.Logging.AddConsole();
+
+            builder.Services.AddOpenTelemetry()
+               .ConfigureResource(resource =>
+                   resource.AddService(
+                       serviceName: "OrderFlow.API",
+                       serviceVersion: "1.0.0"))
+
+               .WithTracing(tracing =>
+               {
+                   tracing.AddAspNetCoreInstrumentation();
+                   tracing.AddEntityFrameworkCoreInstrumentation();
+                   tracing.AddSource("OrderFlow");
+
+                   tracing.AddOtlpExporter();
+               })
+
+               .WithMetrics(metrics =>
+               {
+                   metrics.AddAspNetCoreInstrumentation();
+                   metrics.AddMeter("OrderFlow");
+
+                   metrics.AddPrometheusExporter();
+               });
 
             // Add services to the container.
 
@@ -38,6 +67,9 @@ namespace OrderFlow.API
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
+
+            app.MapPrometheusScrapingEndpoint();
+            app.MapHealthChecks("/health");
 
             app.MapControllers();
 

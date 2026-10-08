@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace OrderFlow.Domain.Features.Orders.GetOrderById;
+namespace OrderFlow.Application.Features.Orders.GetOrderById;
 
 public record GetOrderByIdQuery(int Id) : IRequest<OrderDto?>;
 

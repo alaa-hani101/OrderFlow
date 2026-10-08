@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using HealthChecks.Redis;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OrderFlow.Application.common;
@@ -34,6 +35,12 @@ public static class DependencyInjection
         services.AddScoped< IPendingOrdersProcessor,PendingOrdersProcessor>();
 
         services.AddHostedService<DashboardRefreshBackgroundService>();
+
+        services.AddHealthChecks()
+    .AddDbContextCheck<ApplicationDbContext>(
+        "sql-server")
+     .AddCheck<RedisHealthCheck>(
+        "redis");
 
         return services;
     }
